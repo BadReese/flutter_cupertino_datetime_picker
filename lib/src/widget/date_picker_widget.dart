@@ -215,28 +215,37 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
         height: widget.pickerTheme.pickerHeight,
         decoration: BoxDecoration(color: widget.pickerTheme.backgroundColor),
         child: CupertinoPicker.builder(
-          backgroundColor: widget.pickerTheme.backgroundColor,
-          scrollController: scrollCtrl,
-          itemExtent: widget.pickerTheme.itemHeight,
-          onSelectedItemChanged: valueChanged,
-          selectionOverlay: null,
-          childCount: valueRange.last - valueRange.first + 1,
-          itemBuilder: (context, index) =>
-              _renderDatePickerItemComponent(valueRange.first + index, format),
-        ),
+            diameterRatio: 2,
+            backgroundColor: widget.pickerTheme.backgroundColor,
+            scrollController: scrollCtrl,
+            itemExtent: widget.pickerTheme.itemHeight,
+            onSelectedItemChanged: valueChanged,
+            selectionOverlay: null,
+            childCount: valueRange.last - valueRange.first + 1,
+            itemBuilder: (context, index) => _renderDatePickerItemComponent(
+                valueRange.first + index, format)),
       ),
     );
   }
 
   Widget _renderDatePickerItemComponent(int value, String format) {
-    return Container(
-      height: widget.pickerTheme.itemHeight,
-      alignment: Alignment.center,
-      child: Text(
-        DateTimeFormatter.formatDateTime(value, format, widget.locale),
-        style: widget.pickerTheme.itemTextStyle,
-      ),
-    );
+    var itemTextStyle = widget.pickerTheme.itemTextStyle;
+    if (!(format.contains("y") && value == _currYear ||
+        format.contains("M") && value == _currMonth ||
+        format.contains("d") && value == _currDay)) {
+      itemTextStyle =
+          itemTextStyle.copyWith(fontSize: (itemTextStyle.fontSize! - 16));
+    }
+    return Opacity(
+        opacity: 1,
+        alwaysIncludeSemantics: true,
+        child: Container(
+          height: widget.pickerTheme.itemHeight,
+          alignment: Alignment.center,
+          child: Text(
+              DateTimeFormatter.formatDateTime(value, format, widget.locale),
+              style: itemTextStyle),
+        ));
   }
 
   /// change the selection of year picker

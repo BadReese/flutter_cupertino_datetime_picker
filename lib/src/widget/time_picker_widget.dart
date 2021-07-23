@@ -237,6 +237,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
         height: widget.pickerTheme.pickerHeight,
         decoration: BoxDecoration(color: widget.pickerTheme.backgroundColor),
         child: CupertinoPicker.builder(
+          diameterRatio: 2,
           backgroundColor: widget.pickerTheme.backgroundColor,
           scrollController: scrollCtrl,
           itemExtent: widget.pickerTheme.itemHeight,
@@ -261,7 +262,6 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
 
   _calculateMinuteChildCount(List<int> valueRange, int divider) {
     if (divider == 0) {
-      print("Cant devide by 0");
       return (valueRange.last - valueRange.first + 1);
     }
 
@@ -269,12 +269,19 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
   }
 
   Widget _renderDatePickerItemComponent(int value, String format) {
+    var itemTextStyle = widget.pickerTheme.itemTextStyle;
+    if (!(format.contains("H") && value == _currHour ||
+        format.contains("m") && value == _currMinute ||
+        format.contains("s") && value == _currSecond)) {
+      itemTextStyle =
+          itemTextStyle.copyWith(fontSize: (itemTextStyle.fontSize! - 16));
+    }
     return Container(
       height: widget.pickerTheme.itemHeight,
       alignment: Alignment.center,
       child: Text(
         DateTimeFormatter.formatDateTime(value, format, widget.locale),
-        style: widget.pickerTheme.itemTextStyle,
+        style: itemTextStyle,
       ),
     );
   }
