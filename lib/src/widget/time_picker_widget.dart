@@ -311,6 +311,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
     int value = _secondRange.first + index;
     if (_currSecond != value) {
       _currSecond = value;
+      _changeTimeRange();
       _onSelectedChange();
     }
   }

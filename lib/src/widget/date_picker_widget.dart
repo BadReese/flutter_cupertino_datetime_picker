@@ -273,6 +273,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
     int dayOfMonth = _dayRange.first + index;
     if (_currDay != dayOfMonth) {
       _currDay = dayOfMonth;
+      _changeDateRange();
       _onSelectedChange();
     }
   }
